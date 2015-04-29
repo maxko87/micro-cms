@@ -1,4 +1,4 @@
-.saveSnippetBtn {
+.save-snippet-btn {
   margin: 10px auto;
   width: 100px;
   display: block;
@@ -6,4 +6,7 @@
 .centered {
   text-align: center;
   padding: 5px;
+}
+.snippet-content {
+  margin-top: 40px;
 }

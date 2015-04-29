@@ -20,7 +20,7 @@ if Meteor.isClient
 		$('#editor').html('')
 
 	Template.edit.events 
-		'click .saveSnippetBtn': (evt) ->
+		'click .save-snippet-btn': (evt) ->
 			Session.set('updated', false)
 			existingSnippet = Session.get('snippet')
 			callback = (err, snippet) ->
