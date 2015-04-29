@@ -4,8 +4,6 @@ generateHexId = -> (Math.random()+1).toString(36).substring(2)
 
 Router.route '/', -> 
 	@render 'edit'
-# Router.route '/:id', -> @render 'view', 
-	# data: -> Snippets.findOne({'id': @params.id})
 Router.route '/:id', -> 
 	content = Snippets.findOne({'id': @params.id})?.content
 	@response.end(content + '\n')
