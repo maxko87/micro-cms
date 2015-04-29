@@ -4,8 +4,12 @@ generateHexId = -> (Math.random()+1).toString(36).substring(2)
 
 Router.route '/', -> 
 	@render 'edit'
-Router.route '/:id', -> @render 'view', 
-	data: -> Snippets.findOne({'id': @params.id})
+# Router.route '/:id', -> @render 'view', 
+	# data: -> Snippets.findOne({'id': @params.id})
+Router.route '/:id', -> 
+	content = Snippets.findOne({'id': @params.id})?.content
+	@response.end(content + '\n')
+, where: 'server'
 Router.route '/:id/:password', 
 	name: 'edit'
 	onAfterAction: -> 
@@ -25,7 +29,7 @@ if Meteor.isClient
 			callback = (err, snippet) ->
 				if snippet
 					# TODO: fix when https://github.com/meteor/meteor/issues/2980 is fixed
-					# $('#editor').text('') # TODO: fixme
+					# $('#editor').text('')
 					# Router.go('edit', {'id': snippet.id, 'password': snippet.password})
 					window.location = window.location.origin + "/#{snippet.id}/#{snippet.password}"
 			if existingSnippet
@@ -54,5 +58,10 @@ if Meteor.isServer
 			else
 				return null
 
+	# CORS
+	Meteor.startup ->
+	  WebApp.rawConnectHandlers.use (req, res, next) ->
+	    res.setHeader 'Access-Control-Allow-Origin', '*'
+	    next()
 
 
