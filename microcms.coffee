@@ -17,23 +17,23 @@ if Meteor.isClient
 
 	Template.edit.rendered = ->
 		$('#editor').wysiwyg()
-		$('#editor').html('')
 
 	Template.edit.events 
 		'click .save-snippet-btn': (evt) ->
-			Session.set('updated', false)
 			existingSnippet = Session.get('snippet')
+			newContent = $('#editor').html()
 			callback = (err, snippet) ->
 				if snippet
-					Router.go("edit", {'id': snippet.id, 'password': snippet.password})
-					Session.set('updated', true)
+					# TODO: fix when https://github.com/meteor/meteor/issues/2980 is fixed
+					# $('#editor').text('') # TODO: fixme
+					# Router.go('edit', {'id': snippet.id, 'password': snippet.password})
+					window.location = window.location.origin + "/#{snippet.id}/#{snippet.password}"
 			if existingSnippet
-				Meteor.call 'updateSnippet', existingSnippet, $('#editor').html(), callback
+				Meteor.call 'updateSnippet', existingSnippet, newContent, callback
 			else
-				Meteor.call 'createSnippet', $('#editor').html(), callback
+				Meteor.call 'createSnippet', newContent, callback
 
 	Template.edit.helpers
-		'updated': -> Session.get('updated')
 		'snippet': -> Session.get('snippet')
 		'urlOrigin': -> window.location.origin
 
